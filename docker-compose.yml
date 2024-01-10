@@ -1,0 +1,29 @@
+version: "3" 
+
+services:
+  app:
+    container_name: "python_etl_app"
+    build: .
+    volumes:
+      - .:/etl
+    networks:
+      - default
+
+  postgresqls:
+    container_name: "postgresqlpostgis"
+    image: "postgis/postgis"
+    ports: 
+      - "5433:5432"
+    volumes:
+       - db_persdata:/var/lib/postgrespers
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bdtuto
+    networks:
+      - default
+
+networks:
+  default:
+volumes:
+  db_persdata : {}
