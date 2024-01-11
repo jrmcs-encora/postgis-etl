@@ -11,7 +11,7 @@ def get_airbnb_data() -> List[Dict[str, Any]]:
     csv_file = 'etl/data/listings.csv'
     try:
         df = pd.read_csv(csv_file)
-        # df['latitude_longitude'] = lambda  f'ST_GeomFromText(POINT({} {}));'
+        df['latitude_longitude'] = "POINT(0, 0)"
         column_types = df.dtypes
         for column in df.columns:
             if pd.api.types.is_float_dtype(column_types[column]):
@@ -104,7 +104,8 @@ def _get_airbnb_insert_query() -> str:
         calculated_host_listings_count_entire_homes,
         calculated_host_listings_count_private_rooms,
         calculated_host_listings_count_shared_rooms,
-        reviews_per_month
+        reviews_per_month,
+        latitude_longitude
     )
     VALUES (
         %(id)s,
@@ -181,7 +182,8 @@ def _get_airbnb_insert_query() -> str:
         %(calculated_host_listings_count_entire_homes)s,
         %(calculated_host_listings_count_private_rooms)s,
         %(calculated_host_listings_count_shared_rooms)s,
-        %(reviews_per_month)s
+        %(reviews_per_month)s,
+        POINT(%(latitude)s, %(longitude)s)
     );
     '''
 
